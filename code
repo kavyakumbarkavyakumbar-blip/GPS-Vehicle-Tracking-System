@@ -1,0 +1,52 @@
+/* GPS Vehicle Tracking System using Embedded C
+   8051 Microcontroller UART Communication
+*/
+
+#include <reg51.h>
+
+char gps_data;
+
+void UART_Init()
+{
+    TMOD = 0x20;        // Timer1 mode2
+    TH1  = 0xFD;        // Baud rate 9600
+    SCON = 0x50;        // UART mode
+    TR1  = 1;           // Start timer
+}
+
+char UART_Receive()
+{
+    while(RI == 0);     // Wait until data received
+    RI = 0;
+    return SBUF;        // Return received data
+}
+
+void UART_Transmit(char value)
+{
+    SBUF = value;
+    while(TI == 0);     // Wait for transmission
+    TI = 0;
+}
+
+void UART_String(char *str)
+{
+    while(*str)
+    {
+        UART_Transmit(*str++);
+    }
+}
+
+void main()
+{
+    UART_Init();
+
+    UART_String("GPS Vehicle Tracking System\r\n");
+
+    while(1)
+    {
+        gps_data = UART_Receive();
+
+        // Send received GPS data to serial monitor
+        UART_Transmit(gps_data);
+    }
+}
