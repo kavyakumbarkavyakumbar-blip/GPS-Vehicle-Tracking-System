@@ -87,5 +87,3 @@ The GPS module continuously transmits NMEA data through UART communication. The 
 
 
 
-GitHub:
-[GitHub Official Website](https://github.com?utm_source=chatgpt.com)
